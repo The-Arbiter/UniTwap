@@ -7,13 +7,13 @@ import "v3-core/contracts/libraries/FixedPoint96.sol";
 import "v3-core/contracts/libraries/FullMath.sol";
 
 /// @title UniTwap allows you to fetch Q64.96 (x96) prices from UniSwap and generate time weighted average prices
-contract UniTwap {
+contract UniTwap{
 
   /// @dev Wrapper for the other two functions
-  function getCurrentTwapFromPair(address uniswapV3Pool, uint32 twapInterval) public view returns (uint120 priceX96){
+  function getCurrentTwapFromPair(address uniswapV3Pool, uint32 twapInterval) public view returns (uint160 priceX96){
     uint256 twoFiveSixUintValue = getPriceX96FromSqrtPriceX96(getSqrtTwapX96(uniswapV3Pool,twapInterval));
-    uint120 oneTwoZeroUintValue = uint120(twoFiveSixUintValue);
-    return oneTwoZeroUintValue;
+    uint160 oneSixZeroUintValue = uint160(twoFiveSixUintValue);
+    return oneSixZeroUintValue;
   }
  
   /**
