@@ -8,6 +8,11 @@ import "v3-core/contracts/libraries/FullMath.sol";
 
 /// @title UniTwap allows you to fetch Q64.96 (x96) prices from UniSwap and generate time weighted average prices
 contract UniTwap {
+
+  /// @dev Wrapper for the other two functions
+  function getCurrentTwapFromPair(address uniswapV3Pool, uint32 twapInterval) public view returns (uint256 priceX96){
+    return getPriceX96FromSqrtPriceX96(getSqrtTwapX96(uniswapV3Pool,twapInterval));
+  }
  
   /**
   * @dev Gets sqrtTwapX96 value from some UniV3 pool for a given twapInterval
@@ -18,7 +23,7 @@ contract UniTwap {
   * @dev NOTE Tick has some rounding issues which should be investigated for security vulns
   * @return sqrtPriceX96 => SqrtX96 price for the pool over the interval 
   */
-  function getSqrtTwapX96(address uniswapV3Pool, uint32 twapInterval) public view returns (uint160 sqrtPriceX96) {
+  function getSqrtTwapX96(address uniswapV3Pool, uint32 twapInterval) internal view returns (uint160 sqrtPriceX96) {
 
         // For the first (0th) interval => Return the current sqrtPriceX96 (as a sqrt(token1/token0))
         if (twapInterval == 0) {
@@ -40,7 +45,6 @@ contract UniTwap {
             );
         }
     }
-
 
     /**
     * @dev Converts SqrtPriceX96 to PriceX96 using FullMath
