@@ -10,8 +10,10 @@ import "v3-core/contracts/libraries/FullMath.sol";
 contract UniTwap {
 
   /// @dev Wrapper for the other two functions
-  function getCurrentTwapFromPair(address uniswapV3Pool, uint32 twapInterval) public view returns (uint256 priceX96){
-    return getPriceX96FromSqrtPriceX96(getSqrtTwapX96(uniswapV3Pool,twapInterval));
+  function getCurrentTwapFromPair(address uniswapV3Pool, uint32 twapInterval) public view returns (uint120 priceX96){
+    uint256 twoFiveSixUintValue = getPriceX96FromSqrtPriceX96(getSqrtTwapX96(uniswapV3Pool,twapInterval));
+    uint120 oneTwoZeroUintValue = uint120(twoFiveSixUintValue);
+    return oneTwoZeroUintValue;
   }
  
   /**
@@ -37,7 +39,7 @@ contract UniTwap {
             secondsAgos[1] = 0; // 0 seconds before now (current block.timestamp)
 
             // Get the tick values as of each time before now
-            (int56[] memory tickCumulatives, ) = IUniswapV3Pool(uniswapV3Pool).observe(secondsBeforeNow);
+            (int56[] memory tickCumulatives, ) = IUniswapV3Pool(uniswapV3Pool).observe(secondsAgos);
             
             /// @dev Tick is somewhat imprecise as it is rounded to the nearest integer... Need to investigate security concerns.
             sqrtPriceX96 = TickMath.getSqrtRatioAtTick(

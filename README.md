@@ -5,7 +5,7 @@
 Caveats / warnings:
 
 - This uses ticks which can have rounding errors due to them rounding and storing as integers
-- Returns a X96 (64 bit int, 96 bit float) as uint256 not uint120 due to how FullMath returns values
+- Fullmath returns a X96 (64 bit int, 96 bit float) as uint256 not uint120 and I have cast it to 120 bits, though this needs thorough testing to ensure it can always be cast correctly
 - Math libraries restrict Solidity version to >=0.5.0 through to <0.8.0
 
 
